@@ -1,5 +1,5 @@
-// C++ program for implementation of RR scheduling
 #include<iostream>
+
 using namespace std;
 
 struct Process
@@ -10,7 +10,7 @@ struct Process
 	float burst_time;
 	// The elapsed time between I/O interrupts (system calls)
 	float elapsed_time;
-	// Time spent waiting and processing the I/O 
+	// Time spent waiting and processing the I/O
 	float wait_time;
 	// The priority of the process as an integer (smaller values will have higher priority)
 	int priority;
@@ -18,7 +18,7 @@ struct Process
 
 // Function to find the waiting time for all
 // processes
-void WaitTime(Process process[], int n, int q,float wt[])
+void waitTime(Process process[], int n, int q,float wt[])
 {
 	float rem_bt[n];
 	for (int i = 0 ; i < n ; i++)
@@ -83,7 +83,7 @@ void findavgTime(Process process[], int n, int q)
 	float wt[n], tat[n], total_wt = 0.0, total_tat = 0.0;
 
 	// Function to find waiting time of all processes
-	WaitTime(process, n, q, wt);
+	waitTime(process, n, q, wt);
 
 	// Function to find turn around time for all processes
 	findTurnAroundTime(process, n, wt, tat);
@@ -107,12 +107,12 @@ void findavgTime(Process process[], int n, int q)
 		 << total_tat / n;
 }
 
-void drawgraph(Process process[], int n, int q)
+void drawGraph(Process process[], int n, int q)
 {
 	float wt[n], tat[n], total_wt = 0.0, total_tat = 0.0;
 
 	// Function to find waiting time of all processes
-	WaitTime(process, n, q, wt);
+	waitTime(process, n, q, wt);
 
 	// Function to find turn around time for all processes
 	findTurnAroundTime(process, n, wt, tat);

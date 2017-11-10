@@ -3,51 +3,104 @@
 
 using namespace std;
 
-void call_round_robin()
+// splits the line into a vector of string
+Process split(const string &text, char sep)
 {
-	Process process[] = { { "P1", 0,20,1.5,5,2 }, { "P2", 2,15,2,6,1},
-                    { "P3",6,27,1.8,3.5,4}, { "P4", 4,36,2.1,2.6,3} };
-	int n = sizeof(process) / sizeof(process[0]);
-    int x, time_slice=3;
-    cout << "Enter 1 for Complex(interrupt) case and 0 for normal case(not considering interrupts) : ";
-    cin >> x;
-    if(x==0)
-    {
-        findavgTime(process, n, time_slice);
-        for(int i=1;i<=10;i++)
-        {
-            drawgraph(process,n,i);
-        }
-    }
-    else
-	{
-        for(int i=0;i<n;i++)
-		{
-            process[i].burst_time+=process[i].elapsed_time+process[i].wait_time;
-        }
+	Process commands;
+	size_t start = 0, end = 0;
 
-        findavgTime(process, n, time_slice);
+	end = text.find(sep, start);
+	commands.pid = text.substr(start, end - start);
+	start = end + 1;
+
+	end = text.find(sep, start);
+	stringstream ss;
+	ss << (text.substr(start, end - start));
+	ss >> commands.arrival_time;
+	start = end + 1;
+
+	end = text.find(sep, start);
+	commands.burst_time = stof((text.substr(start, end - start)));
+	start = end + 1;
+
+	end = text.find(sep, start);
+	commands.elapsed_time = stof((text.substr(start, end - start)));
+	start = end + 1;
+
+	end = text.find(sep, start);
+	commands.wait_time = stof((text.substr(start, end - start)));
+	start = end + 1;
+
+	end = text.find(sep, start);
+	commands.priority = stof((text.substr(start, end - start)));
+
+	return commands;
+}
+
+void call_round_robin(Process *processes, int n)
+{
+	int x, time_slice=3;
+	cout << "Enter 1 for Complex(interrupt) case and 0 for normal case(not considering interrupts) : ";
+	cin >> x;
+	if(x==0)
+	{
+		findavgTime(processes, n, time_slice);
+		for(int i=1;i<=10;i++)
+		{
+			drawGraph(processes,n,i);
+		}
+	}
+	else
+	{
+		for(int i=0;i<n;i++)
+		{
+			processes[i].burst_time+=processes[i].elapsed_time+processes[i].wait_time;
+		}
+
+		findavgTime(processes, n, time_slice);
 
 		for(int i=1;i<=10;i++)
-        {
-            drawgraph(process,n,i);
-        }
-    }
+		{
+			drawGraph(processes,n,i);
+		}
+	}
 }
 
 int main()
 {
+	string line;
+	ifstream input_file ("input.txt");
+	int num = 4;
+
+	Process processes[num];
+	if (input_file.is_open())
+	{
+		int i = 0;
+		while ( getline (input_file, line))
+		{
+			processes[i] = split(line, ' ');
+			i++;
+		}
+		input_file.close();
+	}
+	for (size_t i = 0; i < num; i++)
+	{
+		cout << endl;
+		cout << processes[i].pid << " " << processes[i].arrival_time  << " ";
+		cout << processes[i].burst_time << " " << processes[i].elapsed_time  << " ";
+		cout << processes[i].wait_time << " " << processes[i].priority;
+		cout << endl;
+	}
 	cout << "\n1. Shortest Job First (SJF)" << '\n';
 	cout << "2. First Come First Serve (FCFS)" << '\n';
 	cout << "3. Round-robin" << '\n';
 
 	int decider;
-	std::cin >> decider;
+	cin >> decider;
 
 	if (decider == 3)
 	{
-		call_round_robin();
+		call_round_robin(processes, sizeof(processes)/sizeof(processes[0]));
 	}
-	cout << "Succeed\n";
 	return 0;
 }
