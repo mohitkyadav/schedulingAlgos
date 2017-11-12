@@ -40,29 +40,29 @@ Process split(const string &text, char sep)
 
 void call_round_robin(Process *processes, int n)
 {
-	int x, time_slice=3;
+	int x, time_slice = 3;
 	cout << "Enter 1 for Complex(interrupt) case and 0 for normal case(not considering interrupts) : ";
 	cin >> x;
-	if(x==0)
+	if(x == 0)
 	{
 		findavgTime(processes, n, time_slice);
-		for(int i=1;i<=10;i++)
+		for(int i = 1; i <= 10; i++)
 		{
-			drawGraph(processes,n,i);
+			drawGraph(processes, n, i);
 		}
 	}
 	else
 	{
-		for(int i=0;i<n;i++)
+		for(int i = 0; i < n; i++)
 		{
-			processes[i].burst_time+=processes[i].elapsed_time+processes[i].wait_time;
+			processes[i].burst_time += processes[i].elapsed_time+processes[i].wait_time;
 		}
 
 		findavgTime(processes, n, time_slice);
 
-		for(int i=1;i<=10;i++)
+		for(int i = 1; i <= 10; i++)
 		{
-			drawGraph(processes,n,i);
+			drawGraph(processes, n, i);
 		}
 	}
 }
@@ -76,12 +76,12 @@ void call__fcfs()
 	vector< vector< string > > aray;  // the 2D array
 	vector< string > v;                // array of values for one line only
 
-	while ( getline(in,line) )    // get next line in file
+	while ( getline(in, line) )    // get next line in file
 	{
 		v.clear();
 		stringstream ss(line);
 
-		while (getline(ss,field,','))  // break line into comma delimitted fields
+		while (getline(ss, field, ','))  // break line into comma delimitted fields
 		{
 			v.push_back(field);  // add each field to the 1D array
 		}
