@@ -1,6 +1,7 @@
 #include "bits/stdc++.h"
 #include "round_robin.cpp"
 #include "fcfs.cpp"
+#include "sjf.cpp"
 
 using namespace std;
 
@@ -118,6 +119,23 @@ void call__fcfs()
 	cout << "\n" << avgtaTime;
 }
 
+void call_sjf(Process *processes, int n)
+{
+	int x;
+	cout << "Enter 1 for Complex(interrupt) case and 0 for normal case(not considering interrupts) : ";
+	cin >> x;
+	if(x==0)
+		findavgTime(processes, n);
+	else
+	{
+		for(int i=0;i<n;i++)
+		{
+			processes[i].burst_time += processes[i].elapsed_time + processes[i].wait_time;
+		}
+		findavgTime(processes, n);
+	}
+}
+
 int main()
 {
 	string line;
@@ -153,9 +171,14 @@ int main()
 	{
 		call__fcfs();
 	}
+	else if (decider == 1)
+	{
+		call_sjf(processes, sizeof(processes)/sizeof(processes[0]));
+	}
 	else if (decider == 3)
 	{
 		call_round_robin(processes, sizeof(processes)/sizeof(processes[0]));
 	}
+
 	return 0;
 }
