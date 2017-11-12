@@ -110,7 +110,10 @@ void findavgTime(Process process[], int n, int q)
 void drawGraph(Process process[], int n, int q)
 {
 	float wt[n], tat[n], total_wt = 0.0, total_tat = 0.0;
-
+	ofstream outAWT;
+	outAWT.open( "outAWT.txt", ofstream::out | std::ofstream::app);
+	ofstream outTAT;
+	outTAT.open( "outTAT.txt", ofstream::out | std::ofstream::app);
 	// Function to find waiting time of all processes
 	waitTime(process, n, q, wt);
 
@@ -125,8 +128,11 @@ void drawGraph(Process process[], int n, int q)
 		total_tat = total_tat + tat[i];
 	}
 	float avg_wt = total_wt/n;
+	outAWT << avg_wt << " ";
+	outAWT.close();
 	float avg_tat = total_tat/n;
-
+	outTAT << avg_tat << " ";
+	outTAT.close();
 
 /*********************************************************************************************************************************/
 		   /*   YHA PE 2 GRAPH DRAW KARNE KA FUNCTION DAAL DENA*/

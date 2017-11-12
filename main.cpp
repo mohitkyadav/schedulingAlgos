@@ -1,4 +1,6 @@
 #include "bits/stdc++.h"
+#include <stdio.h>
+
 #include "round_robin.cpp"
 #include "fcfs.cpp"
 #include "sjf.cpp"
@@ -65,6 +67,10 @@ void call_round_robin(Process *processes, int n)
 		{
 			drawGraph(processes, n, i);
 		}
+		system("python graphAWT.py");
+		remove("outAWT.txt");
+		system("python graphTAT.py");
+		remove("outTAT.txt");
 	}
 }
 
@@ -139,7 +145,9 @@ void call_sjf(Process *processes, int n)
 int main()
 {
 	string line;
-	ifstream input_file ("input.txt");
+	cout << "Please input the file name(including extension) : ";
+	cin >> line;
+	ifstream input_file (line);
 	int num = 4;
 
 	Process processes[num];
