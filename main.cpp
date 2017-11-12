@@ -72,21 +72,23 @@ void call__fcfs()
 	ifstream in("csv2.txt");
 
 	string line, field;
-
-	vector< vector< string > > aray;  // the 2D array
-	vector< string > v;                // array of values for one line only
-
-	while ( getline(in, line) )    // get next line in file
+	// the 2D array
+	vector< vector< string > > aray;
+    // array of values for one line only
+	vector< string > v;
+	// get next line in file
+	while ( getline(in, line) )
 	{
 		v.clear();
 		stringstream ss(line);
-
-		while (getline(ss, field, ','))  // break line into comma delimitted fields
+		// break line into comma delimitted fields
+		while (getline(ss, field, ','))
 		{
-			v.push_back(field);  // add each field to the 1D array
+			// add each field to the 1D array
+			v.push_back(field);
 		}
-
-		aray.push_back(v);  // add the 1D array to the 2D array
+		// add the 1D array to the 2D array
+		aray.push_back(v);
 	}
 
 	vector< vector< string > > newaray = sortProcess(aray);
