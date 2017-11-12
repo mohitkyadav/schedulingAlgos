@@ -75,7 +75,7 @@ void call__fcfs()
 	string line, field;
 	// the 2D array
 	vector< vector< string > > aray;
-    // array of values for one line only
+	// array of values for one line only
 	vector< string > v;
 	// get next line in file
 	while ( getline(in, line) )
