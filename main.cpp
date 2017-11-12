@@ -1,5 +1,6 @@
 #include "bits/stdc++.h"
 #include "round_robin.cpp"
+#include "fcfs.cpp"
 
 using namespace std;
 
@@ -66,6 +67,55 @@ void call_round_robin(Process *processes, int n)
 	}
 }
 
+void call__fcfs()
+{
+	ifstream in("csv2.txt");
+
+	string line, field;
+
+	vector< vector< string > > aray;  // the 2D array
+	vector< string > v;                // array of values for one line only
+
+	while ( getline(in,line) )    // get next line in file
+	{
+		v.clear();
+		stringstream ss(line);
+
+		while (getline(ss,field,','))  // break line into comma delimitted fields
+		{
+			v.push_back(field);  // add each field to the 1D array
+		}
+
+		aray.push_back(v);  // add the 1D array to the 2D array
+	}
+
+	vector< vector< string > > newaray = sortProcess(aray);
+	int s = newaray.size();
+	int wTime[s] , taTime[s] , aTime[s], bTime[s];
+	float  avgwTime = 0 , avgtaTime = 0;
+
+	wTime[0] = 0;
+	arrivalTime(aTime, newaray, s);
+	burstTime(bTime, newaray, s);
+	waitingTime(wTime, bTime, aTime, s);
+	avgwTime = calAvgwTime(wTime, s);
+	turnAroundTime(taTime, wTime, bTime, s);
+	avgtaTime = calAvgTaTime(taTime, s);
+	// print out what was read in
+
+	for (size_t i = 0; i < newaray.size(); ++i)
+	{
+		for (size_t j = 0; j < newaray[i].size(); ++j)
+		{
+			cout << setw(6) << left << newaray[i][j] << "|"; // (separate fields by |)
+		}
+		cout << setw(6) << left << wTime[i] << "|" << setw(6) << left << taTime[i] << "|";
+		cout << "\n";
+	}
+	cout << "\n" << avgwTime;
+	cout << "\n" << avgtaTime;
+}
+
 int main()
 {
 	string line;
@@ -97,8 +147,11 @@ int main()
 
 	int decider;
 	cin >> decider;
-
-	if (decider == 3)
+	if(decider == 2)
+	{
+		call__fcfs();
+	}
+	else if (decider == 3)
 	{
 		call_round_robin(processes, sizeof(processes)/sizeof(processes[0]));
 	}
