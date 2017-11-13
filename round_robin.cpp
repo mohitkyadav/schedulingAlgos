@@ -32,7 +32,7 @@ void waitTime(Process process[], int n, int q,float wt[])
 	{
 		int flag=1;
         	int i=0;
-		// Traverse all processes one by one repeatedly
+		// Traverse all processes one by one repeatedly 
 		while(i<n)
 		{
 			// If burst time of a process is greater than 0 then only need to process further
