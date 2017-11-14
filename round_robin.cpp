@@ -18,14 +18,13 @@ struct Process
 
 // Function to find the waiting time for all
 // processes
-void waitTime(Process process[], int n, int q,float wt[])
+float waitTime(Process process[], int n, int q,float wt[])
 {
 	float rem_bt[n];
-	float a_time[n]={0};
 	for (int i = 0 ; i < n ; i++)
 		rem_bt[i] =  process[i].burst_time;
 
-	int t = 0;
+	float t = 0.0;
 
 	// Keep traversing processes in round robin manner until all of them are not done.
 	while (1)
@@ -38,12 +37,9 @@ void waitTime(Process process[], int n, int q,float wt[])
 			// If burst time of a process is greater than 0 then only need to process further
 			if (rem_bt[i] > 0)
 			{
-				flag = 0 ; // There is a pending process
-				if(a_time[i] == 0 && i > 0)
-                	a_time[i]=t;
-
-				if (rem_bt[i] > q)
-                {
+		                flag = 0 ; // There is a pending process
+                		if (rem_bt[i] > q)
+                		{
 					// Increase the value of t i.e. shows
 					// how much time a process has been processed
 					t += q;
@@ -57,43 +53,44 @@ void waitTime(Process process[], int n, int q,float wt[])
 				{
 					// Increase the value of t i.e. shows how much time a process has been processed
 					t = t + rem_bt[i];
-                    rem_bt[i] = 0;
+                    			rem_bt[i] = 0;
 					// Waiting time is current time minus time used by this process
 					wt[i] = t - process[i].burst_time-a_time[i];
-                }
+                		}
 			}
 
            	 	if(process[i+1].arrival_time <= t && i < n - 1)
                 	i++;
 
-            	else if(process[i+1].arrival_time>t || i==n-1)
-            	{
-                	int point=0;
-                	for(int j=0;j<=i;j++)
-               		{
-                   	 	if(rem_bt[j]>0)
-                   		{
-                     		point=1;
-							i=j;
-                        	break;
-                    	}
-                	}
-               		if(point==0)
-                	{
-            			if(i==n-1)
-            			{
-							flag=1;
-                    		break;
-                    	}
-                    	t=process[i+1].arrival_time;
-                    	i++;
-                	}
-
-            	}
+            		else if(process[i+1].arrival_time>t || i==n-1)
+            		{
+                		int point=0;
+                		for(int j=0;j<=i;j++)
+               			{
+                   		 	if(rem_bt[j]>0)
+                   			{
+                     				point=1;
+						i=j;
+                        			break;
+                    			}
+                		}
+               			if(point==0)
+                		{
+            				if(i==n-1)
+            				{
+						flag=1;
+                    				break;
+                    			}
+                    			t=process[i+1].arrival_time;
+                    			i++;
+                		}
+	
+        	    	}
 		}
-        if (flag == 1)
-        	break;
+        	if (flag == 1)
+        		break;
 	}
+	return t;
 }
 
 // Function to calculate turn around time
@@ -103,16 +100,34 @@ findTurnAroundTime(Process process[], int n,float wt[], float tat[])
 		tat[i] = process[i].burst_time + wt[i];
 }
 
+// Function to calculate the Standard Deviation
+float calculateSD(float tat[] , int n)
+{
+	float sum = 0.0 , mean , standardDeviation = 0.0;
+	int i=0;
+	for(i=0;i<n;i++)
+	{
+		sum += tat[i];
+	}
+	mean  = sum/n;
+	 for(i=0;i<n;i++)
+	 {
+		standardDeviation += pow(tat[i]-mean , 2);
+	}
+	return sqrt(standardDeviation/n);
+}
+
+
 // Function to calculate average time
 void findavgTime(Process process[], int n, int q)
 {
 	float wt[n], tat[n], total_wt = 0.0, total_tat = 0.0;
 	for(int i=1;i<n;i++)
    	{
-    	process[i].arrival_time+=process[i-1].arrival_time;
-    }
+    		process[i].arrival_time+=process[i-1].arrival_time;
+    	}
 	// Function to find waiting time of all processes
-	waitTime(process, n, q, wt);
+	float total_completion_time = waitTime(process, n, q, wt);
 
 	// Function to find turn around time for all processes
 	findTurnAroundTime(process, n, wt, tat);
@@ -127,13 +142,17 @@ void findavgTime(Process process[], int n, int q)
 		total_wt = total_wt + wt[i];
 		total_tat = total_tat + tat[i];
 		cout << " " << i+1 <<"\t\t "
-			 << wt[i] <<"\t\t " << tat[i] <<endl;
+	             << wt[i] <<"\t\t " << tat[i] <<endl;
 	}
 
 	cout << "Average waiting time = "
-		 << total_wt / n;
+	     << total_wt / n;
 	cout << "\nAverage turn around time = "
-		 << total_tat / n;
+             << total_tat / n;
+    	cout << "\nAverage Completion time = "
+             << total_completion_time / (float)n;
+	cout << "\nStandard_Deviation = "
+	     << calculateSD(tat,n);
 }
 
 void drawGraph(Process process[], int n, int q)
@@ -163,3 +182,4 @@ void drawGraph(Process process[], int n, int q)
 	outTAT << avg_tat << " ";
 	outTAT.close();
 }
+
