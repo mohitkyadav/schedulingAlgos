@@ -73,7 +73,8 @@ void waitTime(Process process[], int n, int q,float wt[])
                			 {	
                    		 	if(rem_bt[j]>0)
                    			 {
-                       				 point=1;
+                       				point=1;
+						i=j;
                         			break;
                     			}
                 		}
@@ -87,7 +88,7 @@ void waitTime(Process process[], int n, int q,float wt[])
                     			t=process[i+1].arrival_time;
                     			i++;
                 		}
-                		else i=0;
+                		
             		}
 		}
         	if (flag == 1)
