@@ -32,18 +32,18 @@ void waitTime(Process process[], int n, int q,float wt[])
 	{
 		int flag=1;
         	int i=0;
-		// Traverse all processes one by one repeatedly 
+		// Traverse all processes one by one repeatedly
 		while(i<n)
 		{
 			// If burst time of a process is greater than 0 then only need to process further
 			if (rem_bt[i] > 0)
 			{
 				flag = 0 ; // There is a pending process
-				if(a_time[i]==0 && i>0)
-                    			a_time[i]=t;
+				if(a_time[i] == 0 && i > 0)
+                	a_time[i]=t;
 
-				if (rem_bt[i] >q)
-                		{
+				if (rem_bt[i] > q)
+                {
 					// Increase the value of t i.e. shows
 					// how much time a process has been processed
 					t += q;
@@ -53,55 +53,52 @@ void waitTime(Process process[], int n, int q,float wt[])
 				}
 
 				// If burst time is smaller than or equal to quantum. Last cycle for this process
-				else if(rem_bt[i]<=q)
+				else if(rem_bt[i] <= q)
 				{
 					// Increase the value of t i.e. shows how much time a process has been processed
 					t = t + rem_bt[i];
-                    			rem_bt[i] = 0;
+                    rem_bt[i] = 0;
 					// Waiting time is current time minus time used by this process
 					wt[i] = t - process[i].burst_time-a_time[i];
-                		}
+                }
 			}
 
-           		 if(process[i+1].arrival_time<=t && i<n-1)
-                		i++;
+           	 	if(process[i+1].arrival_time <= t && i < n - 1)
+                	i++;
 
-            		else if(process[i+1].arrival_time>t || i==n-1)
-            		{
-                		int point=0;
-                		for(int j=0;j<=i;j++)
-               			 {	
-                   		 	if(rem_bt[j]>0)
-                   			 {
-                       				point=1;
-						i=j;
-                        			break;
-                    			}
-                		}
-               			 if(point==0)
-                		{
-                    			if(i==n-1)
-                    			{
-                    			    flag=1;
-                    			    break;
-                    			}
-                    			t=process[i+1].arrival_time;
-                    			i++;
-                		}
-                		
-            		}
+            	else if(process[i+1].arrival_time>t || i==n-1)
+            	{
+                	int point=0;
+                	for(int j=0;j<=i;j++)
+               		{
+                   	 	if(rem_bt[j]>0)
+                   		{
+                     		point=1;
+							i=j;
+                        	break;
+                    	}
+                	}
+               		if(point==0)
+                	{
+            			if(i==n-1)
+            			{
+							flag=1;
+                    		break;
+                    	}
+                    	t=process[i+1].arrival_time;
+                    	i++;
+                	}
+
+            	}
 		}
-        	if (flag == 1)
-                	break;
+        if (flag == 1)
+        	break;
 	}
-
 }
 
 // Function to calculate turn around time
 findTurnAroundTime(Process process[], int n,float wt[], float tat[])
 {
-
-
 	for (int i = 0; i < n ; i++)
 		tat[i] = process[i].burst_time + wt[i];
 }
@@ -110,10 +107,10 @@ findTurnAroundTime(Process process[], int n,float wt[], float tat[])
 void findavgTime(Process process[], int n, int q)
 {
 	float wt[n], tat[n], total_wt = 0.0, total_tat = 0.0;
-	 for(int i=1;i<n;i++)
-   	 {
-     	 	  process[i].arrival_time+=process[i-1].arrival_time;
-    	 }
+	for(int i=1;i<n;i++)
+   	{
+    	process[i].arrival_time+=process[i-1].arrival_time;
+    }
 	// Function to find waiting time of all processes
 	waitTime(process, n, q, wt);
 
@@ -165,5 +162,4 @@ void drawGraph(Process process[], int n, int q)
 	float avg_tat = total_tat/n;
 	outTAT << avg_tat << " ";
 	outTAT.close();
-
 }
