@@ -21,7 +21,6 @@ struct Process
 void waitTime(Process process[], int n, int q,float wt[])
 {
 	float rem_bt[n];
-	float a_time[n]={0};
 	for (int i = 0 ; i < n ; i++)
 		rem_bt[i] =  process[i].burst_time;
 
@@ -39,9 +38,6 @@ void waitTime(Process process[], int n, int q,float wt[])
 			if (rem_bt[i] > 0)
 			{
 				flag = 0 ; // There is a pending process
-				if(a_time[i]==0 && i>0)
-                    			a_time[i]=t;
-
 				if (rem_bt[i] >q)
                 		{
 					// Increase the value of t i.e. shows
@@ -59,7 +55,7 @@ void waitTime(Process process[], int n, int q,float wt[])
 					t = t + rem_bt[i];
                     			rem_bt[i] = 0;
 					// Waiting time is current time minus time used by this process
-					wt[i] = t - process[i].burst_time-a_time[i];
+					wt[i] = t - process[i].burst_time-process[i].arrival_time;
                 		}
 			}
 
