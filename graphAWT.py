@@ -16,7 +16,7 @@ for elem in lin:
 	y.append(float(elem))
 
 print(y)
-plt.plot(x, y)
+plt.scatter(x, y)
 plt.xlabel('x - Time slice')
 plt.ylabel('y - Awerage Waiting Time')
 plt.title('Q vs AWT')
