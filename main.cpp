@@ -53,6 +53,10 @@ void call_round_robin(Process *processes, int n)
 		{
 			drawGraph(processes, n, i);
 		}
+		system("python graphAWT.py");
+		remove("outAWT.txt");
+		system("python graphTAT.py");
+		remove("outTAT.txt");
 	}
 	else
 	{
@@ -74,55 +78,28 @@ void call_round_robin(Process *processes, int n)
 	}
 }
 
-void call__fcfs()
+void call__fcfs(string input_file)
 {
-	ifstream in("csv2.txt");
+	ifstream in(input_file);
 
-	string line, field;
-	// the 2D array
-	vector< vector< string > > aray;
-	// array of values for one line only
-	vector< string > v;
-	// get next line in file
-	while ( getline(in, line) )
-	{
-		v.clear();
-		stringstream ss(line);
-		// break line into comma delimitted fields
-		while (getline(ss, field, ','))
-		{
-			// add each field to the 1D array
-			v.push_back(field);
-		}
-		// add the 1D array to the 2D array
-		aray.push_back(v);
-	}
+    string line, field;
 
-	vector< vector< string > > newaray = sortProcess(aray);
-	int s = newaray.size();
-	int wTime[s] , taTime[s] , aTime[s], bTime[s];
-	float  avgwTime = 0 , avgtaTime = 0;
+    vector< vector<string> > aray;  // the 2D array
+    vector<string> v;                // array of values for one line only
 
-	wTime[0] = 0;
-	arrivalTime(aTime, newaray, s);
-	burstTime(bTime, newaray, s);
-	waitingTime(wTime, bTime, aTime, s);
-	avgwTime = calAvgwTime(wTime, s);
-	turnAroundTime(taTime, wTime, bTime, s);
-	avgtaTime = calAvgTaTime(taTime, s);
-	// print out what was read in
+    while ( getline(in,line) )    // get next line in file
+    {
+        v.clear();
+        stringstream ss(line);
 
-	for (size_t i = 0; i < newaray.size(); ++i)
-	{
-		for (size_t j = 0; j < newaray[i].size(); ++j)
-		{
-			cout << setw(6) << left << newaray[i][j] << "|"; // (separate fields by |)
-		}
-		cout << setw(6) << left << wTime[i] << "|" << setw(6) << left << taTime[i] << "|";
-		cout << "\n";
-	}
-	cout << "\n" << avgwTime;
-	cout << "\n" << avgtaTime;
+        while (getline(ss,field,' '))  // break line into comma delimitted fields
+        {
+            v.push_back(field);  // add each field to the 1D array
+        }
+
+        aray.push_back(v);  // add the 1D array to the 2D array
+    }
+    fcfs(aray);
 }
 
 void call_sjf(Process *processes, int n)
@@ -144,49 +121,51 @@ void call_sjf(Process *processes, int n)
 
 int main()
 {
-	string line;
+	string input_file_name, line;
 	cout << "Please input the file name(including extension) : ";
-	cin >> line;
-	ifstream input_file (line);
-	int num = 4;
-
-	Process processes[num];
-	if (input_file.is_open())
+	cin >> input_file_name;
+	while(1)
 	{
-		int i = 0;
-		while ( getline (input_file, line))
+		ifstream input_file (input_file_name);
+		int num = 4;
+
+		Process processes[num];
+		if (input_file.is_open())
 		{
-			processes[i] = split(line, ' ');
-			i++;
+			int i = 0;
+			while ( getline (input_file, line))
+			{
+				processes[i] = split(line, ' ');
+				i++;
+			}
+			input_file.close();
 		}
-		input_file.close();
-	}
-	for (size_t i = 0; i < num; i++)
-	{
-		cout << endl;
-		cout << processes[i].pid << " " << processes[i].arrival_time  << " ";
-		cout << processes[i].burst_time << " " << processes[i].elapsed_time  << " ";
-		cout << processes[i].wait_time << " " << processes[i].priority;
-		cout << endl;
-	}
-	cout << "\n1. Shortest Job First (SJF)" << '\n';
-	cout << "2. First Come First Serve (FCFS)" << '\n';
-	cout << "3. Round-robin" << '\n';
+		for (size_t i = 0; i < num; i++)
+		{
+			cout << endl;
+			cout << processes[i].pid << " " << processes[i].arrival_time  << " ";
+			cout << processes[i].burst_time << " " << processes[i].elapsed_time  << " ";
+			cout << processes[i].wait_time << " " << processes[i].priority;
+			cout << endl;
+		}
+		cout << "\n1. Shortest Job First (SJF)" << '\n';
+		cout << "2. First Come First Serve (FCFS)" << '\n';
+		cout << "3. Round-robin" << '\n';
 
-	int decider;
-	cin >> decider;
-	if(decider == 2)
-	{
-		call__fcfs();
+		int decider;
+		cin >> decider;
+		if(decider == 2)
+		{
+			call__fcfs(input_file_name);
+		}
+		else if (decider == 1)
+		{
+			call_sjf(processes, sizeof(processes)/sizeof(processes[0]));
+		}
+		else if (decider == 3)
+		{
+			call_round_robin(processes, sizeof(processes)/sizeof(processes[0]));
+		}
 	}
-	else if (decider == 1)
-	{
-		call_sjf(processes, sizeof(processes)/sizeof(processes[0]));
-	}
-	else if (decider == 3)
-	{
-		call_round_robin(processes, sizeof(processes)/sizeof(processes[0]));
-	}
-
 	return 0;
 }
