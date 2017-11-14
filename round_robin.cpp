@@ -55,7 +55,7 @@ float waitTime(Process process[], int n, int q,float wt[])
 					t = t + rem_bt[i];
                     			rem_bt[i] = 0;
 					// Waiting time is current time minus time used by this process
-					wt[i] = t - process[i].burst_time-a_time[i];
+					wt[i] = t - process[i].burst_time-process[i].arrival_time[i];
                 		}
 			}
 
