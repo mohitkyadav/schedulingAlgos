@@ -117,7 +117,7 @@ float fcfscalAvgTaTime(float taTime[],int s)
     return avg;
 }
 
-float calculateSD(float tat[] , int n)
+float fcfsCalculateSD(float tat[] , int n)
 {
 	float sum = 0.0 , mean , standardDeviation = 0.0;
 	int i=0;
@@ -167,7 +167,7 @@ void fcfs(vector< vector <string> > aray)
     avgwTime = fcfscalAvgwTime(wTime,s);
     fcfsturnAroundTime(taTime,wTime,bTime,s);
     avgtaTime = fcfscalAvgTaTime(taTime,s);
-    standardDeviation = calculateSD(taTime,s);
+    standardDeviation = fcfsCalculateSD(taTime,s);
     cout<<"\n\n";
     // print out what was read in
 
